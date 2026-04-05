@@ -34,6 +34,9 @@
     <meta name="twitter:image" content="https://wraas.github.io/0ta/og-image.png">
     <meta name="twitter:image:alt" content="0TA - Zero Token Architecture: Stop prompting. Start thinking.">
 
+    <!-- GoatCounter -->
+    <script data-goatcounter="https://wraas.click/0ta" async src="//gc.zgo.at/count.js"></script>
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -1036,6 +1039,12 @@
     </div>
 
     <script>
+        function gcEvent(name) {
+            if (window.goatcounter && window.goatcounter.count) {
+                window.goatcounter.count({ path: '/0ta/event/' + name });
+            }
+        }
+
         (function () {
             var overlay = document.getElementById('modal');
             var modalTitle = document.getElementById('modal-title');
@@ -1069,7 +1078,18 @@
 
             document.addEventListener('click', function (e) {
                 var btn = e.target.closest('[data-modal-text]');
-                if (btn) openModal(btn.getAttribute('data-modal-text'));
+                if (btn) {
+                    var label = btn.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+                    gcEvent('button-' + label);
+                    openModal(btn.getAttribute('data-modal-text'));
+                }
+
+                var link = e.target.closest('a[href]');
+                if (link && !link.getAttribute('href').startsWith('#')) {
+                    var linkLabel = (link.textContent.trim() || link.getAttribute('href'))
+                        .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                    gcEvent('link-' + linkLabel);
+                }
             });
         })();
 
